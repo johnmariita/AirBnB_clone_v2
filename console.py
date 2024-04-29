@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import re
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -27,7 +28,9 @@ class HBNBCommand(cmd.Cmd):
     types = {
              'number_rooms': int, 'number_bathrooms': int,
              'max_guest': int, 'price_by_night': int,
-             'latitude': float, 'longitude': float
+             'latitude': float, 'longitude': float,
+             'city_id': str, 'user_id': str,
+             'name': str, 'description': str
             }
 
     def preloop(self):
@@ -73,7 +76,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,16 +118,43 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        pattern = r'(\w+)=("?[\w+\d+-]"?)'
+        split_args = args.split(" ")
+        cls = split_args[0]
+        params = split_args[1:]
+        for param in params:
+            if not re.match(pattern, param):
+                return
+        refined = []
+        for param in params:
+            split_param = param.split("=")
+            split_param[1] = split_param[1].replace('_', ' ')
+            split_param[1] = split_param[1].replace('\\"', '')
+            refined.append('='.join(split_param))
+        updated_list = []
+        for param in refined:
+            split_param = param.split("=")
+            if split_param[0] not in HBNBCommand.types:
+                return
+            updated_list.append(split_param[0])
+            updated_list.append(split_param[1])
+        if not cls:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif cls not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        new_instance = HBNBCommand.classes[cls]()
+        for i in range(len(updated_list)):
+            if i % 2 == 0:
+                try:
+                    val = updated_list[i+1].replace('"', '')
+                    attr_val = HBNBCommand.types[updated_list[i]](val)
+                except ValueError:
+                    return
+                setattr(new_instance, updated_list[i], attr_val)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -272,7 +302,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +310,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -314,11 +344,13 @@ class HBNBCommand(cmd.Cmd):
                 new_dict.__dict__.update({att_name: att_val})
 
         new_dict.save()  # save updates to file
+        print("Updated!!")
 
     def help_update(self):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
