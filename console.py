@@ -32,7 +32,7 @@ class HBNBCommand(cmd.Cmd):
              'city_id': str, 'user_id': str,
              'name': str, 'description': str, 'state_id': str,
              'email': str, 'first_name': str, 'last_name': str,
-             'password': str
+             'password': str, 'place_id': str, 'text': str
             }
 
     def preloop(self):
