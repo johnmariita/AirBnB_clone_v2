@@ -3,9 +3,16 @@
 import os
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.review import Review
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False)
+                      )
 
 
 class Place(BaseModel, Base):
@@ -24,6 +31,9 @@ class Place(BaseModel, Base):
         latitude = Column(Float)
         longitude = Column(Float)
         reviews = relationship("Review", backref="place", cascade="delete")
+
+        amenities = relationship('Amenity', secondary=place_amenity,
+                                 viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -49,3 +59,15 @@ class Place(BaseModel, Base):
                 if self.id == obj.id:
                     rev_list.append(instance)
             return rev_list
+
+        @property
+        def amenities(self):
+            """Getter method for the amenity_ids"""
+            return self.amenity_ids
+
+        @amenities.setter
+        def amenities(self, obj=None):
+            """setter for amenity_ids"""
+            if obj is None or obj.__class__.__name__ != "Amenity":
+                return
+            self.amenity_ids.append(obj.id)
