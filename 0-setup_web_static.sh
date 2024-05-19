@@ -12,8 +12,8 @@ sudo touch /data/web_static/releases/test/index.html
 new_string="server_name _;\n\n\tlocation \/hbnb_static {\n\t\talias \/data\/web_static\/current;\n\t}"
 sudo sed -i "s/server_name _;/$new_string/" /etc/nginx/sites-enabled/default
 
-sudo service nginx restart
-
 echo -e "<html>\n  <head>\n  </head>\n    <body>\n      Hello World!\n    </body>\n</html>" | sudo tee '/data/web_static/releases/test/index.html'
+
+sudo service nginx restart
 
 
