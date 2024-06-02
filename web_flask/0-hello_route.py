@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route("/", strict_slashes=False)
 def hello():
     """
-    Function that returns the message hello world to the browser
+    Function that returns the message hello HBNB! to the browser
     """
     return "Hello HBNB!"
 
