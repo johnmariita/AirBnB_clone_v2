@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-# A minimal application using flask
+"""
+A minimal application using flask
+"""
 
 from flask import Flask
 
