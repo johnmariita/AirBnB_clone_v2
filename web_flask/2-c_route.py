@@ -4,6 +4,7 @@ A minimal application using flask
 """
 
 from flask import Flask
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -11,7 +12,7 @@ app = Flask(__name__)
 @app.route("/", strict_slashes=False)
 def hello():
     """
-    Function that returns the message hello HBNB! to the browser
+    Function that returns the message hello HBNB to the browser
     """
     return "Hello HBNB!"
 
@@ -19,9 +20,18 @@ def hello():
 @app.route("/hbnb", strict_slashes=False)
 def hbnb():
     """
-    Function that returns the message HBNB to the browser
+    Function that returns the message hbnb to the browser
     """
     return "HBNB"
+
+
+@app.route("/c/<text>", strict_slashes=False)
+def c(text):
+    """
+    Function that handles the routing for /c/<text>
+    """
+    text.replace("_", " ")
+    return f"C {escape(text)}"
 
 
 if __name__ == "__main__":
