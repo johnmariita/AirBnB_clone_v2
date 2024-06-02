@@ -30,7 +30,7 @@ def c(text):
     """
     Function that handles the routing for /c/<text>
     """
-    text.replace("_", " ")
+    text = text.replace("_", " ")
     return f"C {escape(text)}"
 
 
