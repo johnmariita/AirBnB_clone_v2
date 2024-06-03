@@ -24,7 +24,7 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """Function to return the cities associates with a state"""
-            from models.engine.file_storage import storage
+            from models import storage
             cities_list = []
             objs = storage.all(City)
             for key, obj in objs.items():

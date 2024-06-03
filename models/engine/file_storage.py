@@ -63,3 +63,6 @@ class FileStorage:
             key = obj.to_dict()['__class__'] + '.' + obj.id
             del FileStorage.__objects[key]
             self.save()
+
+    def close(self):
+        self.reload()

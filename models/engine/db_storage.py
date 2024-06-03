@@ -44,7 +44,7 @@ class DBStorage:
                     obj_dict[key] = instance
             return obj_dict
         else:
-            cls_objs = self.__session.query(eval(cls)).all()
+            cls_objs = self.__session.query(eval(cls.__name__)).all()
             for instance in cls_objs:
                 name = type(cls).__name__
                 key = name + '.' + instance.id
@@ -71,3 +71,6 @@ class DBStorage:
         session_fac = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_fac)
         self.__session = Session()
+
+    def close(self):
+        self.__session.close()
