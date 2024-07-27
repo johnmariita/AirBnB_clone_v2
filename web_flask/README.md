@@ -1,1 +1,1 @@
-A directory containing tasks on the flask api project
+directory on Flask projects
