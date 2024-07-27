@@ -59,5 +59,14 @@ def num_temp(n):
     return render_template('5-number.html', n=n)
 
 
+@app.route('/number_odd_or_even/<int:n>')
+def OddorEven(n):
+    """
+    Function that checks if
+    a number is odd or even and displays it
+    """
+    return render_template('6-number_odd_or_even.html', n=n)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
