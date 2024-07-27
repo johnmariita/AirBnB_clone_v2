@@ -34,5 +34,25 @@ def cFun(text):
     return "C " + text
 
 
+@app.route('/python', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def python(text="is cool"):
+    """
+    Function that checks the route
+    after python and returns a string
+    """
+    text = text.replace('_', ' ')
+    return "Python " + text
+
+
+@app.route('/number/<int:n>', strict_slashes=False)
+def num(n):
+    """
+    Function that checks if
+    a route contains a number or not
+    """
+    return f"{n} is a number"
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
