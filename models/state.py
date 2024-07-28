@@ -33,4 +33,4 @@ class State(BaseModel, Base):
             return cities_list
 
     def __init__(self, *args, **kwargs):
-        super.__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

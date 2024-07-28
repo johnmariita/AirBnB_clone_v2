@@ -27,8 +27,8 @@ class BaseModel:
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            self.created_at = datetime.utcnow()
+            self.updated_at = datetime.utcnow()
         else:
             try:
                 ut = datetime.strptime(kwargs['updated_at'],
