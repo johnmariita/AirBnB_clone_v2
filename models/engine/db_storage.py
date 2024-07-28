@@ -44,7 +44,7 @@ class DBStorage:
                     obj_dict[key] = instance
             return obj_dict
         else:
-            cls_objs = self.__session.query(eval(cls.__name__)).all()
+            cls_objs = self.__session.query(eval(cls)).all()
             for instance in cls_objs:
                 name = type(cls).__name__
                 key = name + '.' + instance.id
