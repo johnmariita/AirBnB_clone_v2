@@ -31,3 +31,6 @@ class State(BaseModel, Base):
                 if obj.state_id == self.id:
                     cities_list.append(obj)
             return cities_list
+
+    def __init__(self, *args, **kwargs):
+        super.__init__(*args, **kwargs)

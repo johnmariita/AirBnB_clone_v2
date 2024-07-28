@@ -65,4 +65,7 @@ class FileStorage:
             self.save()
 
     def close(self):
+        """
+        cal on reload method
+        """
         self.reload()
